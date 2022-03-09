@@ -22,6 +22,7 @@ from buildbot.status.web import authz, auth
 from buildbot.status import words
 from buildbot.status import results
 from buildbot.status.results import SUCCESS, FAILURE, WARNINGS
+from buildbot.plugins import changes
 
 import user_settings
 from ShellCommandChangeList import ShellCommandChangeList
@@ -192,22 +193,14 @@ authz_cfg=authz.Authz(
 c['status'] = [
 	html.WebStatus(
 		http_port=8010, authz=authz_cfg, order_console_by_time=True,
-		change_hook_dialects={ 'github' : {
-					'secret': '{{ buildmaster_github_secret }}',
-					'strict': True
-					}
-				},
-		change_hook_auth=["file:/{{ buildmaster_rootdir}}/github-webhook.passwd"]
 	),
-	words.IRC(
-		host='irc.libera.chat',
-		nick='void-builder',
-		password='{{ buildmaster_irc_password }}',
-		channels=[{'channel': '#xbps'}],
-		notify_events={ 'failure' : 1 },
-		noticeOnChannel=True, useRevisions=True
-	)
 ]
+
+c['change_source'] = changes.GitPoller(
+	repourl='https://github.com/void-linux/void-packages.git',
+	branches=['master'],
+	pollInterval=120,
+)
 
 c['title'] = proj
 c['titleURL'] = 'http://www.voidlinux.org/'

@@ -28,7 +28,7 @@
     virtualenv: "/{{ buildmaster_rootdir }}/virtual_builder"
     virtualenv_python: python2
   become_user: "{{ buildmaster_user }}"
-  become_method: sudo
+  become_method: doas
 
 - name: Make Buildbot More Terse
   patch:
@@ -70,15 +70,6 @@
     owner: "{{ buildmaster_user }}"
     group: "{{ buildmaster_user }}"
     mode: 0644
-
-- name: Install GitHub Webhook Password
-  copy:
-    src: secret/buildmaster_github_webhook_passwd
-    dest: "/{{ buildmaster_rootdir }}/github-webhook.passwd"
-    owner: "{{ buildmaster_user }}"
-    group: "{{ buildmaster_user }}"
-    mode: 0400
-  no_log: True
 
 - name: Configure BuildMaster
   template:
