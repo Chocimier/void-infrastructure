@@ -7,7 +7,7 @@ machines = [
         'hostdir': '{{ buildslave_zones[builder.zone].hostdir | default("/hostdir") }}',
         'crosstarget': '{{ buildmaster_machmap[builder.mach].cross }}',
         'subarch': '{{ buildmaster_machmap[builder.mach].subarch }}',
-        'BootstrapArgs': '{{ builder.bootstrapargs | default("-N") }}',
+        'BootstrapArgs': '{{ builder.bootstrapargs | default("") }}',
         'slave_name': '{{ builder.sname | default(builder.name) }}',
         'slave_pass': '{{ buildslave_credentials[builder.name] }}',
         'admin': '{{ buildslave_zones[builder.zone].admin.nick }}'
